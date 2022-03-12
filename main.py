@@ -23,8 +23,11 @@ HASH_METHOD = 'pbkdf2:sha256'
 SALT_LEN = 8
 
 ##CONNECT TO DB
-# Switched to Postgres for deployment to Heroku, fallback to sqlite for dev
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', "sqlite:///blog.db")
+# # Switched to Postgres for deployment to Heroku, fallback to sqlite for dev
+uri = os.environ.get('DATABASE_URL', "sqlite:///blog.db")  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
