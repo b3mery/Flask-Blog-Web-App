@@ -24,7 +24,7 @@ SALT_LEN = 8
 
 ##CONNECT TO DB
 # # Switched to Postgres for deployment to Heroku, fallback to sqlite for dev
-uri = os.environ.get('DATABASE_URL', "sqlite:///blog.db")  # or other relevant config var
+uri = os.environ.get('DATABASE_URL', "sqlite:///blog.db")  #https://help.heroku.com/ZKNTJQSK/why-is-sqlalchemy-1-4-x-not-connecting-to-heroku-postgres
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
@@ -232,5 +232,4 @@ def confirm_delete(post_id):
     return render_template('delete_post_modal.html', all_posts=posts, logged_in=current_user.is_authenticated, delete_post=post_id)
 
 if __name__ == "__main__":
-    # app.run(host='0.0.0.0', port=5000)
-    app.run(debug=True)
+    app.run()
