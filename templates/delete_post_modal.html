@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+
+{% block modal%}
+<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Post</h5>
+            <a href="{{url_for('get_all_posts')}}" type="button" class="close" aria-label="Close"></a>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the post?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('delete_post', post_id=delete_post) }}" class="btn btn-primary" style="background-color: rgb(179, 26, 26);">Delete Post</a>
+          <a href="{{url_for('get_all_posts')}}" class="btn btn-secondary">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $("#deleteModal").modal("show")
+})
+
+</script>
+{% endblock %}
