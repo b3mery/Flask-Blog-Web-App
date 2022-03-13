@@ -2,7 +2,7 @@
 
 Blog Web Application developed for 100 days of code on Udemey. 
 
-At the time of writing, the app has been delployed one [Heroku here](https://ben-blog-app.herokuapp.com/). Developed using Flask and Bootstap. The html/css/bootstrap structure is sourced from a bootstrap template.
+At the time of writing, the app has been delployed one [Heroku here](https://ben-blog-app.herokuapp.com/). Developed using Flask and Bootstap. The html/css/bootstrap structure is sourced from [Start Bootstrap - Clean Blog template](https://startbootstrap.com/previews/clean-blog).
 
 
 
