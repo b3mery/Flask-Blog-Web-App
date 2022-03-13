@@ -34,11 +34,7 @@
           <p class="post-meta">Posted by
             <a href="#">{{post.author.first_name}} {{post.author.last_name}}</a>
             on {{post.date}}
-          
-            <!-- If user id == 1 then they are admin and can delete post -->
-            <!-- {% if current_user.is_admin == 1 or current_user.id == post.author.id : %}
-            <a href="{{url_for('confirm_delete', post_id=post.id) }}" style="color: red;">✘</a>
-            {% endif %} -->
+            
           </p>
         </div>
         <hr>
