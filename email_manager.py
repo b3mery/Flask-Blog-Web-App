@@ -7,7 +7,6 @@ def send_email_notification(name:str, contact_email:str, contact_phone:str, mess
     """
     MY_EMAIL = os.getenv('GMAIL_EMAIL')
     MY_PASSWORD = os.getenv('GMAIL_PASSWORD')
-    print(f"{MY_EMAIL}, {MY_PASSWORD}")
     TO_ADD = MY_EMAIL
 
     if MY_EMAIL is None or MY_PASSWORD is None:
