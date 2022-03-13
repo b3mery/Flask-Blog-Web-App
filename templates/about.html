@@ -1,14 +1,14 @@
 {% include "header.html" %}
 
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url({{ url_for('static', filename='img/about-bg.jpg')}})">
+  <header class="masthead" style="background-image: url({{url_for('static', filename='img/about-bg.jpg')}})">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="page-heading">
-            <h1>About Me</h1>
-            <span class="subheading">This is what I do.</span>
+            <h1>About</h1>
+            <span class="subheading">Some information about the site.</span>
           </div>
         </div>
       </div>
@@ -19,16 +19,26 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        <p>This is a fake blog site. It was developed for 100 days of code on Udemey.
-          The site uses a bootstrap blog template as a scaffold. The site is run using Python Flask and is connected to a relational database.</p>
-        <p>The site has real production ready functionality, below is a list of the features:</p>
+        <p>This is a fake blog site. It was developed for <A href="https://www.udemy.com/course/100-days-of-code/">100 days of code on Udemey.</A>
+          The site uses a <a href="https://startbootstrap.com/previews/clean-blog">Start Bootstrap Clean Blog template</a> as a scaffold, checkout <a href="https://startbootstrap.com/">Start Bootstrap</a> to see their other awesome templates.</p>
+        <p>The site is run using Python Flask and is connected to a relational database. It has real production ready functionality, below is an overview of the functionality:</p>
         <ul>
-          <li>Login and Registration functionality</li>
-          <li>Password Hashing</li>
-          <li>Dynamic nav based on current authentication.</li>
-          <li>Users can create, edit or delete their posts.</li>
-          <li>Admin accounts can create, edit or delete any post.</li>
-          <li>Login users can post comments on posts.</li>
+          <li>User Login and Registration:</li>
+          <ul>
+            <li>Minimun 8 charater Password</li>
+            <li>Password Hashing</li>
+            <li>Unique email</li>
+            <li>Form error feeback, such as incorrect password, email does not exist, email is already used, etc.</li>
+          </ul>
+          <li>Dynamic Navigation based on current user authentication.</li>
+          <li>Dynamic options for users to:</li>
+          <ul>
+            <li>Create a new blog.</li>
+            <li>Edit an existing blog.</li>
+            <li>Delete an existing. With delete confrimaiton popup modal.</li>
+            <li>Comment on their or another users post.</li>
+          </ul>
+          <li>Admin accounts can create, edit or delete any users blog post. <i>Note: Admin account will need to be created/updated in the database.</i></li>
         </ul>
       </div>
     </div>
