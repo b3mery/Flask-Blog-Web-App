@@ -247,11 +247,6 @@ def delete_post(post_id):
     return redirect(url_for('get_all_posts'))
 
 
-@app.route("/confirm/delete/<int:post_id>")
-def confirm_delete(post_id):
-    posts = BlogPost.query.all()
-    return render_template('delete_post_modal.html', all_posts=posts, logged_in=current_user.is_authenticated, delete_post=post_id, website_name=SITE_NAME, year=CURRENT_YEAR)
-
 ################################################## Flask APP Run #############################################################################################################
 if __name__ == "__main__":
     app.run()
