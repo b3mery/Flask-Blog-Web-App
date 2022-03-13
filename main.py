@@ -1,22 +1,25 @@
-import datetime
 from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
-from forms import ContactForm, CreatePostForm, RegisterUserForm, LoginUserForm, CommentForm
-from flask_gravatar import Gravatar
 import sqlalchemy.exc
-from functools import wraps
-import os
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from flask_gravatar import Gravatar
+
+
 import email_manager
+from forms import ContactForm, CreatePostForm, RegisterUserForm, LoginUserForm, CommentForm
+
+import os
+from datetime import date, datetime
+from functools import wraps
+
 
 ### Constants
 SITE_NAME = "My Blog Site"
-CURRENT_YEAR = datetime.datetime.now().year
+CURRENT_YEAR = datetime.now().year
 DEFAULT_POST_IMAGE_BG = "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
 ## Flask Password hash
 HASH_METHOD = 'pbkdf2:sha256'
@@ -251,4 +254,4 @@ def confirm_delete(post_id):
 
 ################################################## Flask APP Run #############################################################################################################
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
