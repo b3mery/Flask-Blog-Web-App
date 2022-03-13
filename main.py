@@ -180,7 +180,7 @@ def show_post(post_id):
 
 @app.route("/about")
 def about():
-    return render_template("about.html", logged_in=current_user.is_authenticated)
+    return render_template("about.html", logged_in=current_user.is_authenticated, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/contact", methods=['GET', 'POST'])
