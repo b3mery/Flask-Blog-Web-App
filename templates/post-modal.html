@@ -1,0 +1,60 @@
+{% extends 'post.html' %}
+
+{% block modal%}
+<div class="modal" tabindex="-1" role="dialog" id="deleteModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete the post?</p>
+        </div>
+        <div class="modal-footer">
+          <a href="{{url_for('delete_post', post_id=post.id) }}" class="btn btn-primary" style="background-color: rgb(179, 26, 26);">Delete Post</a>
+          <button id="close-button" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+<script>
+// Get the modal
+var modal = document.getElementById("deleteModal");
+
+// Get the button that opens the modal
+var btn_delete = document.getElementById("delete-post");
+// Get the button that closes the modal
+var btn_close = document.getElementById("close-button");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn_delete.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks on close button, close the modal
+  btn_close.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+{% endblock %}

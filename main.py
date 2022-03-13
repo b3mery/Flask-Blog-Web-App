@@ -178,7 +178,7 @@ def show_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
         return redirect(url_for('show_post', post_id = requested_post.id))
-    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, website_name=SITE_NAME, year=CURRENT_YEAR)
+    return render_template("post-modal.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/about")

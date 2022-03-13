@@ -30,7 +30,9 @@
           {% if current_user.is_admin == 1 or current_user.id == post.author.id : %}
           <div class="clearfix">
             <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
-            </div>
+            <button id="delete-post" class="btn btn-secondary float-left" style="background-color: rgb(179, 26, 26);" href="{{url_for('edit_post', post_id=post.id)}}">Delete Post</button>
+            <!-- href="{{url_for('edit_post', post_id=post.id)}}" -->
+          </div>
             {% endif %}
 
 <!-- Post a comment Area -->
@@ -69,6 +71,8 @@
       </div>
     </div>
   </article>
-
+  {% block modal %}{% endblock %}
   <hr>
+  {% block script %}{% endblock %}
+
 {% include "footer.html" %}

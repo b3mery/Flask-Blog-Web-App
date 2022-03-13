@@ -1,3 +1,5 @@
+{% extends 'bootstrap/base.html' %}
+{% block content %}
 {% include "header.html" %}
 
   <!-- Page Header -->
@@ -34,9 +36,9 @@
             on {{post.date}}
           
             <!-- If user id == 1 then they are admin and can delete post -->
-            {% if current_user.is_admin == 1 or current_user.id == post.author.id : %}
+            <!-- {% if current_user.is_admin == 1 or current_user.id == post.author.id : %}
             <a href="{{url_for('confirm_delete', post_id=post.id) }}" style="color: red;">✘</a>
-            {% endif %}
+            {% endif %} -->
           </p>
         </div>
         <hr>
@@ -64,3 +66,4 @@
   {% block script %}{% endblock %}
 
 {% include "footer.html" %}
+{% endblock %}
