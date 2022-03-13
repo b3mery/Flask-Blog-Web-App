@@ -130,7 +130,7 @@ def register():
         new_user = User(
             first_name = form.first_name.data,
             last_name =  form.last_name.data,
-            email = form.email.data,
+            email = form.email.data.lower(),
             password = generate_password_hash(form.password.data, method=HASH_METHOD, salt_length=SALT_LEN)
         )
         try:
@@ -148,7 +148,7 @@ def register():
 def login():
     form = LoginUserForm()
     if form.validate_on_submit():
-        user:User = User.query.filter_by(email=form.email.data).first()
+        user:User = User.query.filter_by(email=form.email.data.lower()).first()
         if user is None:
             flash("That email does not exist, please try again")
         elif not check_password_hash(user.password ,form.password.data):
