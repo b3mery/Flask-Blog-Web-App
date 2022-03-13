@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
           <div class="site-heading">
-            <h1>Blog</h1>
+            <h1>{{website_name}}</h1>
             <span class="subheading">A collection of random musings.</span>
           </div>
         </div>
@@ -35,7 +35,6 @@
           
             <!-- If user id == 1 then they are admin and can delete post -->
             {% if current_user.is_admin == 1 or current_user.id == post.author.id : %}
-            <!-- <a href="{{url_for('delete_post', post_id=post.id) }}">✘</a> -->
             <a href="{{url_for('confirm_delete', post_id=post.id) }}" style="color: red;">✘</a>
             {% endif %}
           </p>
@@ -47,6 +46,13 @@
         {% if current_user.is_authenticated: %}
         <div class="clearfix">
           <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
+        </div>
+        {% else %}
+        <div class="clearfix">
+          <label class="float-right">To create a post
+          <a class="btn btn-primary" href="{{url_for('login')}}">Login</a>
+          <a class="btn btn-secondary" href="{{url_for('register')}}">Register</a>
+        </label>
         </div>
         {% endif %}
       </div>

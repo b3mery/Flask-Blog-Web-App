@@ -1,29 +1,36 @@
-from flask import Flask, abort, render_template, redirect, request, url_for, flash
+import datetime
+from flask import Flask, abort, render_template, redirect, url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
-from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterUserForm, LoginUserForm, CommentForm
+from flask_login import UserMixin, login_user, LoginManager, current_user, logout_user
+from forms import ContactForm, CreatePostForm, RegisterUserForm, LoginUserForm, CommentForm
 from flask_gravatar import Gravatar
 import sqlalchemy.exc
 from functools import wraps
 import os
+import email_manager
 
-app = Flask(__name__)
-# os env varbale sourced from Heroku deployment
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-ckeditor = CKEditor(app)
-Bootstrap(app)
-
+### Constants
+SITE_NAME = "My Blog Site"
+CURRENT_YEAR = datetime.datetime.now().year
+DEFAULT_POST_IMAGE_BG = "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
 ## Flask Password hash
 HASH_METHOD = 'pbkdf2:sha256'
 SALT_LEN = 8
 
-##CONNECT TO DB
-# # Switched to Postgres for deployment to Heroku, fallback to sqlite for dev
+################################################## Flask APP Set Up #############################################################################################################
+
+app = Flask(__name__)
+# os env varbale sourced from Heroku deployment
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'RanDOM123SECRET')
+ckeditor = CKEditor(app)
+Bootstrap(app)
+
+# Postgres DB for deployment, sqlite for dev
 uri = os.environ.get('DATABASE_URL', "sqlite:///blog.db")  #https://help.heroku.com/ZKNTJQSK/why-is-sqlalchemy-1-4-x-not-connecting-to-heroku-postgres
 if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://", 1)
@@ -36,6 +43,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
+################################################## Database Set Up #############################################################################################################
 ##CONFIGURE TABLES
 class User(UserMixin, db.Model):
     __tablename__ = "users"
@@ -77,6 +85,8 @@ class Comment(db.Model):
 
 db.create_all()
 
+################################################## Decorators and Login Manager ######################################################################################################
+
 # Load login user:
 @login_manager.user_loader
 def load_user(user_id):
@@ -102,10 +112,12 @@ def create_user_or_admin_only(function):
         return function(*args, **kwargs)
     return decorated_function
 
+################################################## Flask APP Routes #############################################################################################################
+
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated)
+    return render_template("index.html", all_posts=posts, logged_in=current_user.is_authenticated, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -126,7 +138,7 @@ def register():
         else:
             login_user(new_user)
             return redirect(url_for('get_all_posts'))
-    return render_template("register.html", form=form)
+    return render_template("register.html", form=form, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -141,7 +153,7 @@ def login():
         else:
             login_user(user)
             return redirect(url_for('get_all_posts'))
-    return render_template("login.html", form = form)
+    return render_template("login.html", form = form, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route('/logout')
@@ -163,7 +175,7 @@ def show_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
         return redirect(url_for('show_post', post_id = requested_post.id))
-    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form)
+    return render_template("post.html", post=requested_post, logged_in=current_user.is_authenticated, form=form, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/about")
@@ -171,9 +183,15 @@ def about():
     return render_template("about.html", logged_in=current_user.is_authenticated)
 
 
-@app.route("/contact")
+@app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    return render_template("contact.html", logged_in=current_user.is_authenticated)
+    form = ContactForm()
+    if form.validate_on_submit():
+        if not email_manager.send_email_notification(form.name.data,form.email.data,form.phone.data,form.message.data):
+            flash('Internal error submitting your form, please try agin later.')
+        else:
+            return redirect(url_for('contact'))
+    return render_template("contact.html", logged_in=current_user.is_authenticated, form=form, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/new-post",  methods=['GET', 'POST'])
@@ -181,17 +199,17 @@ def add_new_post():
     form = CreatePostForm()
     if form.validate_on_submit():
         new_post = BlogPost(
-            title=form.title.data,
-            subtitle=form.subtitle.data,
-            body=form.body.data,
-            img_url=form.img_url.data,
-            author=current_user,
-            date=date.today().strftime("%B %d, %Y")
+            title = form.title.data,
+            subtitle = form.subtitle.data,
+            body = form.body.data,
+            img_url = (form.img_url.data or DEFAULT_POST_IMAGE_BG),
+            author = current_user,
+            date = date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)
         db.session.commit()
         return redirect(url_for("get_all_posts"))
-    return render_template("make-post.html", form=form, logged_in=current_user.is_authenticated)
+    return render_template("make-post.html", form=form, logged_in=current_user.is_authenticated, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/edit-post/<int:post_id>" , methods=['GET', 'POST'])
@@ -214,7 +232,7 @@ def edit_post(post_id):
         db.session.commit()
         return redirect(url_for("show_post", post_id=post.id))
 
-    return render_template("make-post.html", form=edit_form, logged_in=current_user.is_authenticated)
+    return render_template("make-post.html", form=edit_form, logged_in=current_user.is_authenticated, website_name=SITE_NAME, year=CURRENT_YEAR)
 
 
 @app.route("/delete/<int:post_id>", methods=['GET', 'POST'])
@@ -229,7 +247,8 @@ def delete_post(post_id):
 @app.route("/confirm/delete/<int:post_id>")
 def confirm_delete(post_id):
     posts = BlogPost.query.all()
-    return render_template('delete_post_modal.html', all_posts=posts, logged_in=current_user.is_authenticated, delete_post=post_id)
+    return render_template('delete_post_modal.html', all_posts=posts, logged_in=current_user.is_authenticated, delete_post=post_id, website_name=SITE_NAME, year=CURRENT_YEAR)
 
+################################################## Flask APP Run #############################################################################################################
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

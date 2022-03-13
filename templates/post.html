@@ -34,11 +34,17 @@
             {% endif %}
 
 <!-- Post a comment Area -->
+{% if logged_in : %}
+  {{ ckeditor.load() }}
+  {{ ckeditor.config(name='comment') }}
+  {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
 
-{{ ckeditor.load() }}
-{{ ckeditor.config(name='comment') }}
-{{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-
+{% else %}
+  <p class="float-right">To post a comment 
+    <a href="{{url_for('login')}}" class="btn btn-primary">login</a> 
+    <a href="{{url_for('register')}}" class="btn btn-secondary">register</a>
+  </p>
+{% endif %}
 <!-- Comments Area -->
           <div class="col-lg-8 col-md-10 mx-auto comment">
             {% for comment in post.comments %}
