@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# ignore database that will be generated
+*.db
+
 # C extensions
 *.so
 
