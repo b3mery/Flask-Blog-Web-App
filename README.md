@@ -15,7 +15,12 @@ Functionality Overview:
 * Users passwords are hashed
 * Users data, posts and comments are stored in a relational database.
 
-Screenshots:
+# Site Walkthrough: 
+
+</img>
+<img src = "docs/demo.gif", alt = "demo gif", height = "350">
+
+# Screenshots:
 * Index page - Non logged in user
 
 </img>
@@ -36,15 +41,14 @@ Screenshots:
 </img>
 <img src = "docs/logged-in-user-index.png", alt = "logged in index page", height = "350">
 
-* Logged in - creator delete post
-
-</img>
-<img src = "docs/delete-post.png", alt = "logged in - delete post", height = "350">
-
 * Logged in creator - Blog post
 
 </img>
 <img src = "docs/logged-in-creator-post.png", alt = "logged in creator post", height = "350">
+* Logged in - creator delete post
+
+</img>
+<img src = "docs/delete-post.png", alt = "logged in - delete post", height = "350">
 
 * Logged in edit post
 
@@ -56,10 +60,6 @@ Screenshots:
 </img>
 <img src = "docs/not-logged-in-post.png", alt = "not logged in blog post", height = "350">
 
-* Logged in - not creator - Index
-
-</img>
-<img src = "docs/logged-in-not-creator-index.png", alt = "not logged in blog post", height = "350">
 
 * Logged in - other user - blog post
 
